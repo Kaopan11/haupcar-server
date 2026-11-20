@@ -7,6 +7,7 @@ const licensePlateSchema = z
   .transform((value) => value.replace(/[\s-]/g, "").toUpperCase())
   .pipe(z.string().min(1).max(20));
 
+// Trim text, reject a blank value, and limit the length.
 const requiredTextSchema = (maxLength: number) =>
   z.string().trim().min(1).max(maxLength);
 
@@ -23,6 +24,12 @@ const notesSchema = z
     return value;
   });
 
+// The id in the URL must be a whole number greater than 0.
+export const carIdParamsSchema = z.object({
+  id: z.string().regex(/^[1-9]\d*$/),
+});
+
+// The create and update body. Extra fields are rejected.
 export const carBodySchema = z
   .object({
     licensePlate: licensePlateSchema,
